@@ -1,6 +1,7 @@
 "use server";
 
-import { ID, Query, InputFile } from "node-appwrite";
+import { ID, Query } from "node-appwrite";
+import { InputFile } from "node-appwrite/file";
 import { BUCKET_ID, DATABASE_ID, ENDPOINT, PATIENT_COLLECTION_ID, PROJECT_ID, databases, storage, users } from "../appwrite.config";
 import { parseStringify } from "../utils";
 
@@ -33,7 +34,7 @@ export const registerPatient = async ({ identificationDocument, ...patient }: Re
   try {
     let file;
     if (identificationDocument) {
-      const inputFile = identificationDocument && InputFile.fromBlob(identificationDocument?.get("blobFile") as Blob, identificationDocument?.get("fileName") as string);
+      const inputFile = identificationDocument && InputFile.fromBuffer(identificationDocument?.get("blobFile") as Blob, identificationDocument?.get("fileName") as string);
 
       file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
     }
